@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../blocs/loginBloc.dart';
+import '../blocs/Provider.dart';
 class LoginScreen extends StatefulWidget{
 
   @override
@@ -12,14 +13,15 @@ class LoginScreen extends StatefulWidget{
 
 class LoginState extends State<LoginScreen>{
   final formKey = GlobalKey<FormState>();
-  final bloc = new Bloc();
   Widget build(BuildContext context){
+
+    final bloc = Provider.of(context);
     return MaterialApp(
         title: 'ayman',
       home: Scaffold(
         appBar: AppBar(title: Text('Login'),),
         body: SingleChildScrollView(
-    child: loginWidget(),
+        child: loginWidget(bloc),
         ),
       ),
       debugShowCheckedModeBanner: false,
@@ -27,14 +29,14 @@ class LoginState extends State<LoginScreen>{
   }
 
 
-  Widget loginWidget(){
+  Widget loginWidget(Bloc bloc){
 
     return Column(
       children: <Widget>[
         Container(margin: EdgeInsets.all(20),),
-        emailField(),
+        emailField(bloc),
         Container(margin: EdgeInsets.all(20),),
-        passwordField(),
+        passwordField(bloc),
         Container(margin: EdgeInsets.all(20),),
         submitButton(),
         Container(margin: EdgeInsets.all(20),),
@@ -50,7 +52,7 @@ class LoginState extends State<LoginScreen>{
 
 
 
-  Widget emailField(){
+  Widget emailField(Bloc bloc){
     return StreamBuilder(
       stream: bloc.emailValidate,
       builder: (context, snapshot){
@@ -67,7 +69,7 @@ class LoginState extends State<LoginScreen>{
     );
   }
 
-  Widget passwordField(){
+  Widget passwordField(Bloc bloc){
     return StreamBuilder(
       stream: bloc.passwordValidate,
       builder: (password, snapshot){

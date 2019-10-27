@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-
 class ClientScreen extends StatefulWidget{
 
   State<StatefulWidget> createState(){
@@ -11,11 +10,10 @@ class ClientScreen extends StatefulWidget{
 
 class Client extends State<ClientScreen>{
   final List<String> orders = new List<String>();
-  int count = 0;
   final controller = TextEditingController();
-  final formKey = GlobalKey<FormState>();
-  Widget build(BuildContext context){
 
+  Widget build(BuildContext context){
+    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -28,6 +26,7 @@ class Client extends State<ClientScreen>{
                   context: context,
                   builder: (BuildContext context){
                     return AlertDialog(
+                      contentPadding: EdgeInsets.only(bottom: bottom),
                       content: orderForm(),
                     );
                   }
@@ -56,6 +55,7 @@ class Client extends State<ClientScreen>{
         ),
 
     ),
+      debugShowCheckedModeBanner: false,
 
 
     );
@@ -117,10 +117,10 @@ class Client extends State<ClientScreen>{
       width: 260.0,
       height: 320.0,
         child: Form(
-      key: formKey,
       child: Column(
         children: <Widget>[
           TextFormField(
+            controller: controller,
             //obscureText: true,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(
@@ -150,7 +150,7 @@ class Client extends State<ClientScreen>{
 
 
           TextFormField(
-            controller: controller,
+            enableInteractiveSelection: true,
             //obscureText: true,
             keyboardType: TextInputType.multiline,
             decoration: InputDecoration(
@@ -164,6 +164,7 @@ class Client extends State<ClientScreen>{
             onPressed: (){
               setState(() {
                 orders.add(controller.text);
+
               });
             },
           ),
