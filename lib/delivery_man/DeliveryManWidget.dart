@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import '../blocs/loginBloc.dart';
-import '../blocs/Provider.dart';
-class LoginScreen extends StatefulWidget{
-
+import 'package:url_launcher/url_launcher.dart';
+class DeliveryState extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return LoginState();
+    return DeliveryWidget();
   }
+
 
 }
 
-class LoginState extends State<LoginScreen>{
-  final formKey = GlobalKey<FormState>();
-  Widget build(BuildContext context){
+class DeliveryWidget extends State<DeliveryState>{
 
-    final bloc = Provider.of(context);
+  final List<String> clients = new List<String>();
+  bool boolValue = false;
+  @override
+  Widget build(BuildContext context) {
+    clients.add('ayman subbagh 0544089753 https://goo.gl/maps/cu13vWivgLYiThUa8');
+    clients.add('ahmad murad 0544089753 https://goo.gl/maps/hpYWwZTJSRVE9bH89');
+    clients.add('abood murad 0544089753 https://goo.gl/maps/hpYWwZTJSRVE9bH89');
     return MaterialApp(
-        title: 'ayman',
       home: Scaffold(
-        appBar: AppBar(title: Text('Login'),),
-        body: SingleChildScrollView(
-        child: loginWidget(bloc),
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text('Delivery'),
         ),
         drawer: Drawer(
           child: Column(
@@ -31,81 +33,53 @@ class LoginState extends State<LoginScreen>{
             ],
           ),
         ),
-      ),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+        body: ListView.builder(
+          itemCount: clients.length,
+          itemBuilder: (context, index){
+            return ListTile(
+              title: Text(clients[index]),
+              onTap: (){
+                List order = clients[index].split(' ');
+                runApp(MaterialApp(
+                  home: Scaffold(
+                    appBar: AppBar(
+                      title: Text(order[0] + ' ' + order[1]),
+                    ),
+                    body: Center(
+                      child: Column(
+                        children: <Widget>[
+                          Text('name: ' + order[0] + ' ' + order[1]),
+                          Text('phone number: ' + order[2]),
+                          InkWell(
+                            child: Text('location: ' + order[3]),
+                            onTap: () async{
+                              print(order[3]);
+                              if(await canLaunch(order[3])){
+                                await launch(order[3]);
+                              }else{
+                                throw 'Could not launch $order[3]';
+                              }
+                            },
 
-
-  Widget loginWidget(Bloc bloc){
-
-    return Column(
-      children: <Widget>[
-        Container(margin: EdgeInsets.all(20),),
-        emailField(bloc),
-        Container(margin: EdgeInsets.all(20),),
-        passwordField(bloc),
-        Container(margin: EdgeInsets.all(20),),
-        submitButton(),
-        Container(margin: EdgeInsets.all(20),),
-        InkWell(
-          child: Text('register now!!'),
-          onTap: (){
-            Navigator.pushNamed(context, '/register');
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+                );
+              },
+            );
           },
         ),
-      ],
-    );
-  }
-
-
-
-  Widget emailField(Bloc bloc){
-    return StreamBuilder(
-      stream: bloc.emailValidate,
-      builder: (context, snapshot){
-        return TextField(
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-              labelText: 'Email Address',
-              errorText: snapshot.error,
-              hintText: 'you@example.com',
-          ),
-          onChanged: bloc.changeEmail,
-        );
-      },
-    );
-  }
-
-  Widget passwordField(Bloc bloc){
-    return StreamBuilder(
-      stream: bloc.passwordValidate,
-      builder: (password, snapshot){
-        return TextField(
-          //obscureText: true,
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            errorText: snapshot.error,
-            labelText: 'Password',
-
-          ),
-          onChanged: bloc.changePassword,
-        );
-      },
-    );
-  }
-
-  Widget submitButton(){
-    return Center(
-      child: RaisedButton(onPressed: (){
-          print('wa khra');
-
-      },
-      child: Text('Submit'),
       ),
+      debugShowCheckedModeBanner: false,
+
 
     );
   }
+
+
 
   Widget drawerContent(){
     return Column(

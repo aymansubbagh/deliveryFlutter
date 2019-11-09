@@ -1,25 +1,33 @@
-
 import 'package:flutter/material.dart';
 import '../screens/register.dart';
 import '../screens/screen.dart';
 import '../client/client.dart';
 import '../blocs/Provider.dart';
-class App extends StatelessWidget{
+import '../supervisor/supervisorWidget.dart';
+import '../delivery_man/DeliveryManWidget.dart';
+class App extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return Main();
+  }
+}
 
-  Widget build(BuildContext context){
+class Main extends State<App> {
+
+
+  Widget build(BuildContext context) {
     return Provider(
       child: MaterialApp(
         routes: <String, WidgetBuilder>{
-          '/register': (BuildContext context) => Register(),
-          '/login':   (BuildContext context) => LoginScreen(),
-          '/client':   (BuildContext context) => ClientScreen(),
+          '/register': (BuildContext context) => RegisterState(),
+          '/login': (BuildContext context) => LoginScreen(),
+          '/client': (BuildContext context) => ClientScreen(),
+          '/supervisor': (BuildContext context) => SupervisorApp(),
+          '/delivery': (BuildContext context) => DeliveryState(),
         },
         title: 'Log me in',
-        home: Scaffold(
-          body: LoginScreen(),
-
-        ),
-        debugShowCheckedModeBanner: false,
+        home: LoginScreen(),
       ),
     );
   }

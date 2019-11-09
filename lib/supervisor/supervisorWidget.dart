@@ -1,37 +1,38 @@
-
 import 'package:flutter/material.dart';
-class ClientScreen extends StatefulWidget{
 
-  State<StatefulWidget> createState(){
-    return Client();
+class SupervisorApp extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return SupervisorWidget();
   }
-
 }
-
-class Client extends State<ClientScreen>{
-  final List<String> orders = new List<String>();
+class SupervisorWidget extends State<SupervisorApp>{
   final controller = TextEditingController();
-
-  Widget build(BuildContext context){
+  final List<String> clients = new List<String>();
+  bool boolValue = false;
+  @override
+  Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
+
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
-          title: Text('Clients'),
+          title: Text('Supervisor'),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
 
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context){
-                    return AlertDialog(
-                      contentPadding: EdgeInsets.only(bottom: bottom),
-                      content: orderForm(),
-                    );
-                  }
-              );
+            showDialog(
+                context: context,
+                builder: (BuildContext context){
+                  return AlertDialog(
+                    contentPadding: EdgeInsets.only(bottom: bottom),
+                    content: orderForm(),
+                  );
+                }
+            );
 
 
           },
@@ -47,15 +48,36 @@ class Client extends State<ClientScreen>{
           ),
         ),
         body: ListView.builder(
-          itemCount: orders.length,
+          itemCount: clients.length,
           itemBuilder: (context, index){
             return ListTile(
-              title: Text(orders[index]),
+              title: Text(clients[index]),
+              onLongPress: (){
+                showDialog(
+                    context: context,
+                  builder: (context){
+                      return AlertDialog(
+                        content: Column(
+                          children: <Widget>[
+                            Text("ahmad murad"),
+                            Checkbox(
+                              value: boolValue,
+                              onChanged: (bool value){
+                                setState(() {
+                                  boolValue = value;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                  }
+                );
+              },
             );
           },
         ),
-
-    ),
+      ),
       debugShowCheckedModeBanner: false,
 
 
@@ -142,67 +164,36 @@ class Client extends State<ClientScreen>{
 
   Widget orderForm(){
     return SingleChildScrollView(
-        child: Container(
-      width: 260.0,
-      height: 320.0,
+      child: Container(
+        width: 100.0,
+        height: 130.0,
         child: Form(
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            controller: controller,
-            //obscureText: true,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              labelText: 'customer name:',
-            ),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: controller,
+                //obscureText: true,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  labelText: 'customer name:',
+                ),
+              ),
+              Container(margin: EdgeInsets.only(top:5),),
+              FloatingActionButton(
+                onPressed: (){
+                  setState(() {
+                    clients.add(controller.text);
+
+                  });
+                },
+              ),
+
+
+            ],
           ),
-          Container(margin: EdgeInsets.only(top:5),),
-
-          TextFormField(
-            //obscureText: true,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              labelText: 'customer phone number:',
-            ),
-          ),
-          Container(margin: EdgeInsets.only(top:5),),
-
-
-          TextFormField(
-            //obscureText: true,
-            keyboardType: TextInputType.url,
-            decoration: InputDecoration(
-              labelText: 'customer location:',
-            ),
-          ),
-          Container(margin: EdgeInsets.only(top:5),),
-
-
-          TextFormField(
-            enableInteractiveSelection: true,
-            //obscureText: true,
-            keyboardType: TextInputType.multiline,
-            decoration: InputDecoration(
-              labelText: 'customer order:',
-            ),
-
-
-          ),
-          Container(margin: EdgeInsets.only(top:5),),
-          FloatingActionButton(
-            onPressed: (){
-              setState(() {
-                orders.add(controller.text);
-
-              });
-            },
-          ),
-
-
-        ],
+        ),
       ),
-    ),
-    ),
     );
   }
+
 }
